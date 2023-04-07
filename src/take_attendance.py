@@ -3,50 +3,23 @@ from dsClass.align_custom import AlignCustom
 from dsClass.face_feature import FaceFeature
 from dsClass.mtcnn_detect import MTCNNDetect
 from dsClass.tf_graph import FaceRecGraph
-import openpyxl as xl
 import datetime
-import time
-import argparse
 import sys
 import json
 import numpy as np
 import sqlite3
-import os
-
-con = sqlite3.connect("../attendance_db.sqlite")
-cur = con.cursor()
 
 
-def main(args):
-    mode = args.mode
-    if (mode == "camera"):
-        camera_recog()
-    else:
-        raise ValueError("Unimplemented mode")
-
-
-def camera_recog():
-    # Load present date and time
-    now = datetime.datetime.now().strftime("YYYY-MM-DD HH:MM:SS.SSS")
-    # today = now.day
-    # month = now.month
+def take_attendance():
+    FRGraph = FaceRecGraph();
+    aligner = AlignCustom();
+    extract_feature = FaceFeature(FRGraph)
+    face_detect = MTCNNDetect(FRGraph, scale_factor=2);
+    con = sqlite3.connect("../attendance_db.sqlite")
+    cur = con.cursor()
     todays_date = datetime.date.today()
-    currentDate = datetime.datetime.utcnow().strftime("YYYY-MM-DD HH:MM:SS.SSS")
-
-    # path1 = r'/home/user/Code/github.com/Brianchib/attendance_project/Class.xlsx'
-    # path2 = r'/home/user/Code/github.com/Brianchib/attendance_project/Attendance.xlsx'
+    currentDate = datetime.datetime.utcnow()
     names = json.load(open("../names.txt"))
-
-    # wb1 = xl.load_workbook(filename=path1)
-    # ws1 = wb1.worksheets[0]
-
-    # wb2 = xl.load_workbook(filename=path2)
-    # ws2 = wb2.worksheets[0]
-    # ws2 = wb2.create_sheet('Att'+str(today))
-
-    # for row in ws1:
-    #     for cell in row:
-    #         ws2[cell.coordinate].value = cell.value
 
     print("[INFO] camera sensor warming up...")
     vs = cv2.VideoCapture(0);  # get input from webcam
@@ -77,12 +50,12 @@ def camera_recog():
                         present_student_res = cur.execute("SELECT name FROM attendance").fetchall()
                         present_student_names = [each for (each,) in present_student_res]
                         if name not in present_student_names:
-                            cur.execute("INSERT INTO attendance (name, index_number, time, present, course_code, course_date) VALUES (?, ?, ?, TRUE, 'cscd21',?)",
-                                        (name, rollno, currentDate, todays_date ))
+                            cur.execute(
+                                "INSERT INTO attendance (name, index_number, time, present, course_code, course_date) VALUES (?, ?, ?, TRUE, 'cscd21',?)",
+                                (name, rollno, currentDate, todays_date))
                             con.commit()
                         pass
-                        # ws2.cell(row=int(1), column=int(today)).value = currentDate
-                        # ws2.cell(row=int(rollno), column=int(today)).value = "Present"
+
                     else:
                         pass
 
@@ -92,10 +65,6 @@ def camera_recog():
             break
     vs.release()  # camera release
     cv2.destroyAllWindows()
-    # Save Woorksheet
-    # wb2.save(path2)
-    # os.system('python Dupli.py')
-    # os.system('python Readonly.py')
 
 
 '''
@@ -137,14 +106,3 @@ def findPeople(features_arr, positions, thres=0.6, percent_thres=70):
             result = "Unknown"
         returnRes.append((result, percentage))
     return returnRes
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", type=str, help="Run camera recognition", default="camera")
-    args = parser.parse_args(sys.argv[1:]);
-    FRGraph = FaceRecGraph();
-    aligner = AlignCustom();
-    extract_feature = FaceFeature(FRGraph)
-    face_detect = MTCNNDetect(FRGraph, scale_factor=2);  # scale_factor, rescales image for faster detection
-    main(args);

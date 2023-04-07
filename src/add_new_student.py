@@ -53,3 +53,4 @@ def add_new_student():
     data_set[student_name] = person_features
     f = open('../dsClass/facerec_128D.txt', 'w')
     f.write(json.dumps(data_set))
+    return True

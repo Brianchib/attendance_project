@@ -3,25 +3,18 @@ from dsClass.align_custom import AlignCustom
 from dsClass.face_feature import FaceFeature
 from dsClass.mtcnn_detect import MTCNNDetect
 from dsClass.tf_graph import FaceRecGraph
-import argparse
-import sys
 import json
 import numpy as np
-import pandas as pd
 import sqlite3
 
-con = sqlite3.connect("../attendance_db.sqlite")
-cur = con.cursor()
 
-def main(args):
-    mode = args.mode
-    if (mode == "input"):
-        create_manual_data()
-    else:
-        raise ValueError("Unimplemented mode")
-
-
-def create_manual_data():
+def add_new_student():
+    con = sqlite3.connect("../attendance_db.sqlite")
+    cur = con.cursor()
+    FRGraph = FaceRecGraph()
+    aligner = AlignCustom()
+    extract_feature = FaceFeature(FRGraph)
+    face_detect = MTCNNDetect(FRGraph, scale_factor=2)
     vs = cv2.VideoCapture(0);  # get input from webcam
 
     print("Please input new user name:\n")
@@ -60,22 +53,3 @@ def create_manual_data():
     data_set[student_name] = person_features
     f = open('../dsClass/facerec_128D.txt', 'w')
     f.write(json.dumps(data_set))
-
-
-face_detect = None
-aligner = None
-extract_feature = None
-FRGraph = None
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", type=str, help="Add New Face data", default="input")
-    args = parser.parse_args(sys.argv[1:]);
-    FRGraph = FaceRecGraph();
-    aligner = AlignCustom();
-    extract_feature = FaceFeature(FRGraph)
-    face_detect = MTCNNDetect(FRGraph, scale_factor=2);  # scale_factor, rescales image for faster detection
-    main(args);
-
-

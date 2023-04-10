@@ -10,7 +10,7 @@ import numpy as np
 import sqlite3
 
 
-def take_attendance():
+def take_attendance(course_code):
     FRGraph = FaceRecGraph();
     aligner = AlignCustom();
     extract_feature = FaceFeature(FRGraph)
@@ -19,7 +19,8 @@ def take_attendance():
     cur = con.cursor()
     todays_date = datetime.date.today()
     currentDate = datetime.datetime.utcnow()
-    names = json.load(open("../names.txt"))
+
+    all_student_names = dict(cur.execute("SELECT name, index_number FROM student").fetchall())
 
     print("[INFO] camera sensor warming up...")
     vs = cv2.VideoCapture(0);  # get input from webcam
@@ -45,19 +46,35 @@ def take_attendance():
                               2)  # draw bounding box for the face
                 cv2.putText(frame, recog_data[i][0] + " - " + str(recog_data[i][1]) + "%", (rect[0], rect[1]),
                             cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
-                for rollno, name in names.items():
+                for name, index_number in all_student_names.items():
                     if name == recog_data[i][0]:
                         present_student_res = cur.execute("SELECT name FROM attendance").fetchall()
                         present_student_names = [each for (each,) in present_student_res]
                         if name not in present_student_names:
                             cur.execute(
-                                "INSERT INTO attendance (name, index_number, time, present, course_code, course_date) VALUES (?, ?, ?, TRUE, 'cscd21',?)",
-                                (name, rollno, currentDate, todays_date))
+                                "INSERT INTO attendance (name, index_number, time, present, course_code, course_date) VALUES (?, ?, ?, TRUE, ?,?)",
+                                (name, index_number, currentDate, course_code, todays_date))
                             con.commit()
-                        pass
-
-                    else:
-                        pass
+                        else:
+                            student_courses = cur.execute("SELECT course_code FROM attendance WHERE name = ?",
+                                                          (name,)).fetchall()
+                            student_course_list = [each for (each,) in student_courses]
+                            course_code_date = cur.execute("SELECT course_date FROM attendance WHERE course_code = ?",
+                                                           (course_code,)).fetchall()
+                            course_code_date_list = [each for (each,) in course_code_date]
+                            if course_code not in student_course_list:
+                                cur.execute(
+                                    "INSERT INTO attendance (name, index_number, time, present, course_code, course_date) VALUES (?, ?, ?, TRUE, ?,?)",
+                                    (name, index_number, currentDate, course_code, todays_date))
+                                con.commit()
+                            elif course_code in student_course_list and todays_date not in course_code_date_list:
+                                print("save on")
+                            # else:
+                            #     if course_code in student_course_list and todays_date not in course_code_date_list:
+                            #         cur.execute(
+                            #             "INSERT INTO attendance (name, index_number, time, present, course_code, course_date) VALUES (?, ?, ?, TRUE, ?,?)",
+                            #             (name, index_number, currentDate, course_code, todays_date))
+                            #         con.commit()
 
         cv2.imshow("Capturing Face", frame)
         key = cv2.waitKey(1) & 0xFF
@@ -106,3 +123,6 @@ def findPeople(features_arr, positions, thres=0.6, percent_thres=70):
             result = "Unknown"
         returnRes.append((result, percentage))
     return returnRes
+
+
+take_attendance("CSIT123")

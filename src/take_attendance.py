@@ -56,25 +56,15 @@ def take_attendance(course_code):
                                 (name, index_number, currentDate, course_code, todays_date))
                             con.commit()
                         else:
-                            student_courses = cur.execute("SELECT course_code FROM attendance WHERE name = ?",
+                            student_courses = cur.execute("SELECT course_code, course_date FROM attendance WHERE name = ?",
                                                           (name,)).fetchall()
-                            student_course_list = [each for (each,) in student_courses]
-                            course_code_date = cur.execute("SELECT course_date FROM attendance WHERE course_code = ?",
-                                                           (course_code,)).fetchall()
-                            course_code_date_list = [each for (each,) in course_code_date]
-                            if course_code not in student_course_list:
+                            course_tuple = (course_code,str(todays_date))
+                            if course_tuple not in student_courses:
                                 cur.execute(
                                     "INSERT INTO attendance (name, index_number, time, present, course_code, course_date) VALUES (?, ?, ?, TRUE, ?,?)",
                                     (name, index_number, currentDate, course_code, todays_date))
                                 con.commit()
-                            elif course_code in student_course_list and todays_date not in course_code_date_list:
-                                print("save on")
-                            # else:
-                            #     if course_code in student_course_list and todays_date not in course_code_date_list:
-                            #         cur.execute(
-                            #             "INSERT INTO attendance (name, index_number, time, present, course_code, course_date) VALUES (?, ?, ?, TRUE, ?,?)",
-                            #             (name, index_number, currentDate, course_code, todays_date))
-                            #         con.commit()
+
 
         cv2.imshow("Capturing Face", frame)
         key = cv2.waitKey(1) & 0xFF

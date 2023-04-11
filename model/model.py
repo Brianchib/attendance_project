@@ -56,7 +56,7 @@ model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same'))
 model.add(layers.MaxPooling2D(pool_size=(2,2)))
 model.add(layers.Flatten())
 model.add(layers.Dense(units=128, activation='relu'))
-model.add(layers.Dense(units=11, activation='sigmoid'))
+model.add(layers.Dense(units=10000, activation='sigmoid'))
 
 # output the summary of the model providing total number of parameters within the model
 model.summary()

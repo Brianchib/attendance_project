@@ -45,4 +45,4 @@ def add_new_student(student_name, student_index_number):
     f.write(json.dumps(data_set))
     return True
 
-add_new_student("Andea", 123443)
+# add_new_student("Andea", 123443)

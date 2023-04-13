@@ -115,4 +115,4 @@ def findPeople(features_arr, positions, thres=0.6, percent_thres=70):
     return returnRes
 
 
-take_attendance("CSIT123")
+# take_attendance("CSIT123")

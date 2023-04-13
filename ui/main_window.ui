@@ -6,38 +6,71 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1118</width>
+    <width>1154</width>
     <height>872</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>1154</width>
+    <height>872</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1154</width>
+    <height>872</height>
+   </size>
+  </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Facial Recognition Attendance System</string>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>20</y>
-      <width>1101</width>
-      <height>841</height>
+      <y>0</y>
+      <width>1161</width>
+      <height>851</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>1161</width>
+      <height>851</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>1161</width>
+      <height>851</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/images/background.jpg);</string>
     </property>
     <property name="currentIndex">
      <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
-      <string>Tab 1</string>
+      <string>STUDENT</string>
      </attribute>
      <widget class="QPushButton" name="pushButton">
       <property name="geometry">
        <rect>
-        <x>510</x>
-        <y>670</y>
-        <width>94</width>
+        <x>593</x>
+        <y>60</y>
+        <width>131</width>
         <height>27</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: gray;</string>
       </property>
       <property name="text">
        <string>Add student</string>
@@ -47,10 +80,13 @@
       <property name="geometry">
        <rect>
         <x>130</x>
-        <y>60</y>
+        <y>100</y>
         <width>901</width>
-        <height>551</height>
+        <height>631</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: white;</string>
       </property>
       <property name="columnCount">
        <number>0</number>
@@ -59,28 +95,136 @@
      <widget class="QLineEdit" name="lineEdit">
       <property name="geometry">
        <rect>
-        <x>160</x>
-        <y>680</y>
-        <width>113</width>
+        <x>130</x>
+        <y>60</y>
+        <width>191</width>
         <height>27</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: white;</string>
+      </property>
+      <property name="placeholderText">
+       <string>Enter  Fullname</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit_2">
       <property name="geometry">
        <rect>
-        <x>330</x>
-        <y>680</y>
-        <width>113</width>
+        <x>362</x>
+        <y>60</y>
+        <width>171</width>
         <height>27</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: white;</string>
+      </property>
+      <property name="placeholderText">
+       <string>Enter  Index Number</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="geometry">
+       <rect>
+        <x>540</x>
+        <y>750</y>
+        <width>94</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: gray;</string>
+      </property>
+      <property name="text">
+       <string>Refresh List</string>
       </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>Tab 2</string>
+      <string>ATTENDANCE</string>
      </attribute>
+     <widget class="QTableWidget" name="tableWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>90</y>
+        <width>1131</width>
+        <height>631</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: white;</string>
+      </property>
+      <property name="columnCount">
+       <number>0</number>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>750</y>
+        <width>94</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: gray;</string>
+      </property>
+      <property name="text">
+       <string>Refresh List</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>191</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: white;</string>
+      </property>
+      <property name="placeholderText">
+       <string>Enter Course Code</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_4">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>50</y>
+        <width>141</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: gray;</string>
+      </property>
+      <property name="text">
+       <string>View Attendance</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_5">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>50</y>
+        <width>141</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: gray;</string>
+      </property>
+      <property name="text">
+       <string>Take Attendance</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>

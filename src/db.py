@@ -1,7 +1,7 @@
 from PyQt5 import QtSql
 import sqlite3
 
-con = sqlite3.connect("attendance_db.sqlite")
+con = sqlite3.connect("../attendance_db.sqlite")
 cur = con.cursor()
 
 

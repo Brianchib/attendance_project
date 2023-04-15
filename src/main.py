@@ -1,13 +1,14 @@
 import sqlite3
-from PyQt5 import QtWidgets
 import sys
-from ui.main_window import Ui_MainWindow
-from ui.login_ui import Ui_Form
+
+from PyQt5 import QtWidgets
+
 from ui.failed_auth import Ui_Dialog
+from ui.login_ui import Ui_Form
+from ui.main_window import Ui_MainWindow
 
 
 class LoginWindow(QtWidgets.QWidget):
-
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Skills In Motion")
@@ -35,7 +36,7 @@ class LoginWindow(QtWidgets.QWidget):
             self.failed_auth_window.show()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     login_window = LoginWindow()
     login_window.show()

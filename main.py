@@ -1,13 +1,15 @@
 # This is a sample Python script.
+import sqlite3
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
-from PyQt5 import QtWidgets, QtSql, QtGui
+from PyQt5 import QtWidgets
 import sys
-from ui.main_window import Ui_MainWindow
+from main_window import Ui_MainWindow
 from ui.login_ui import Ui_Form
 from ui.failed_auth import Ui_Dialog
+
 
 class LoginWindow(QtWidgets.QWidget):
 
@@ -16,22 +18,16 @@ class LoginWindow(QtWidgets.QWidget):
         self.setWindowTitle("Skills In Motion")
         self.login_ui = Ui_Form()
         self.login_ui.setupUi(self)
-        self.open_db()
+        self.con = sqlite3.connect("attendance_db.sqlite")
+        self.cur = self.con.cursor()
         self.login_ui.pushButton.clicked.connect(self.check_user)
-
-    def open_db(self):
-        self.db = QtSql.QSqlDatabase.addDatabase("QSQLITE")
-        self.db.setDatabaseName("user_account.sqlite")
-        if not self.db.open():
-            print("Database Connection Error")
-        self.query = QtSql.QSqlQuery()
 
     def check_user(self):
         username = self.login_ui.lineEdit.text()
         password = self.login_ui.lineEdit_2.text()
-        self.query.exec_("select * from userdata where username = '%s' and password = '%s';" %(username, password))
-        self.query.first()
-        if self.query.value("username") != None and self.query.value("password") != None:
+        login_query = "select * from userdata where username = ? and password = ?;"
+        res = self.cur.execute(login_query, (username, password)).fetchone()
+        if res != None:
             self.main_window = QtWidgets.QMainWindow()
             self.main_ui = Ui_MainWindow()
             self.main_ui.setupUi(self.main_window)

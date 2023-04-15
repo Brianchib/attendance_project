@@ -35,7 +35,7 @@ def add_new_student(student_name, student_index_number):
             aligned_frame, pos = aligner.align(160, frame, landmarks[i])
             if len(aligned_frame) == 160 and len(aligned_frame[0]) == 160:
                 person_imgs[pos].append(aligned_frame)
-                cv2.imshow("Captured face", aligned_frame)
+                cv2.imshow("Pres 'q' to save and close window", aligned_frame)
         key = cv2.waitKey(1) & 0xFF
         if key == 30 or key == ord("q"):
             break

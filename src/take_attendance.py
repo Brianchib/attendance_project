@@ -104,7 +104,7 @@ def take_attendance(course_code):
                                 )
                                 con.commit()
 
-        cv2.imshow("Capturing Face", frame)
+        cv2.imshow("Taking Attendance", frame)
         key = cv2.waitKey(1) & 0xFF
         if key == 27 or key == ord("q"):
             break

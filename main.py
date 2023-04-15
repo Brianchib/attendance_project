@@ -1,12 +1,7 @@
-# This is a sample Python script.
 import sqlite3
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
 from PyQt5 import QtWidgets
 import sys
-from main_window import Ui_MainWindow
+from attendance_window import Ui_MainWindow
 from ui.login_ui import Ui_Form
 from ui.failed_auth import Ui_Dialog
 

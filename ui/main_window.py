@@ -122,7 +122,7 @@ class Ui_MainWindow(object):
             return take_attendance(self.course_code_text_input.text())
 
     def load_student_data(self):
-        con = sqlite3.connect('attendance_db.sqlite')
+        con = sqlite3.connect('../attendance_db.sqlite')
         cur = con.cursor()
         student_query = "select * from student;"
         table_row = 0
@@ -134,7 +134,7 @@ class Ui_MainWindow(object):
             table_row += 1
 
     def load_attendance(self, course_code):
-        con = sqlite3.connect('attendance_db.sqlite')
+        con = sqlite3.connect('../attendance_db.sqlite')
         cur = con.cursor()
         query = "SELECT * FROM attendance where course_code = ?"
         tablerow = 0

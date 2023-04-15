@@ -13,7 +13,7 @@ class LoginWindow(QtWidgets.QWidget):
         self.setWindowTitle("Skills In Motion")
         self.login_ui = Ui_Form()
         self.login_ui.setupUi(self)
-        self.con = sqlite3.connect("attendance_db.sqlite")
+        self.con = sqlite3.connect("../attendance_db.sqlite")
         self.cur = self.con.cursor()
         self.login_ui.pushButton.clicked.connect(self.check_user)
 

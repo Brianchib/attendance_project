@@ -23,20 +23,26 @@ def take_attendance(course_code):
     video_from_camera = cv2.VideoCapture(0)
     while True:
         _, frame = video_from_camera.read()
+        # Detect face from the video feed.
         rects, landmarks = face_detect.detect_face(frame, 80)
         aligns = []
         positions = []
+        # Creat a rectangle box around the face
         for i, rect in enumerate(rects):
             aligned_face, face_pos = aligner.align(160, frame, landmarks[i])
             if len(aligned_face) == 160 and len(aligned_face[0]) == 160:
                 aligns.append(aligned_face)
                 positions.append(face_pos)
         if len(aligns) > 0:
+            # Get face feature from the detected face
             features_arr = extracted_face_feature.get_features(aligns)
+            # Perfom face recognition
             recog_data = recognize_face(features_arr, positions)
             for i, rect in enumerate(rects):
+                # Put the rectangular box around the face
                 cv2.rectangle(frame, (rect[0], rect[1]), (rect[0] + rect[2], rect[1] + rect[3]), (0, 255, 0), 2, )
                 cv2.putText(frame, recog_data[i][0] + " - " + str(recog_data[i][1]) + "%", (rect[0], rect[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA,)
+                # Save the names of the face captured in the database
                 for name, index_number in all_student_names.items():
                     if name == recog_data[i][0]:
                         present_student_res = cur.execute("SELECT name FROM attendance").fetchall()
@@ -61,9 +67,11 @@ def take_attendance(course_code):
 
 # RecognizeFace function performs a linear search for 128D vector on the screen to that of the file
 def recognize_face(face_feature_from_screen, positions, threshold=0.6, percent_threshold=70):
+    # Read the stored face features
     face_rec_file = open("../dsClass/facerec_128D.txt", "r")
     data_from_face_rec_file = json.loads(face_rec_file.read())
     student_name_percentage = []
+    # loop through the stored face features and compare it with the student face features being captured by the camera
     for i, face_feature in enumerate(face_feature_from_screen):
         student_result = "Unregistered Student"
         smallest = sys.maxsize
@@ -75,6 +83,7 @@ def recognize_face(face_feature_from_screen, positions, threshold=0.6, percent_t
                     smallest = distance
                     student_result = student
         percentage = min(100, 100 * threshold / smallest)
+        # condition to check if the percentage obtain is less than 70.
         if percentage <= percent_threshold:
             student_result = "Unregistered Student"
         student_name_percentage.append((student_result, percentage))

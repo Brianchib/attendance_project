@@ -121,11 +121,4 @@ class Ui_Form(object):
         self.lineEdit_2.setPlaceholderText(_translate("Form", "  Password"))
         self.pushButton.setText(_translate("Form", "L o g  I n"))
 
-# if __name__ == "__main__":
-#         app = QtWidgets.QApplication(sys.argv)
-#         Form = QtWidgets.QWidget()
-#         ui = Ui_Form()
-#         ui.setupUi(Form)
-#         Form.show()
-#         sys.exit(app.exec_())
 

@@ -107,57 +107,84 @@ class Ui_MainWindow(object):
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+
+    # Onclick action to call add_student function
     def call_add_student(self):
         if self.name_text_input.text() != '' and self.index_number_text_input.text() != '':
             return add_new_student(self.name_text_input.text(), self.index_number_text_input.text())
         return True
+
+
+    # Onclick action to call load_attendacne function
 
     def call_load_attendance(self):
         if self.course_code_text_input.text() != '':
             return self.load_attendance(self.course_code_text_input.text())
         return True
 
+    # Onclick action to call take_attendance function
     def call_take_attendance(self):
         if self.course_code_text_input.text() != '':
             return take_attendance(self.course_code_text_input.text())
 
+
+    # This function fetch student and displays them in a table
     def load_student_data(self):
+        # Connect to the attendance database
         con = sqlite3.connect('../attendance_db.sqlite')
         cur = con.cursor()
+        # Select all student from the student table
         student_query = "select * from student;"
+        # Set the number of rows in the attendance table to the number of results returned by the query
         table_row = 0
         self.student_table.setRowCount(len(cur.execute(student_query).fetchall()))
+        # Iterate over each row returned by the query and add it to the table
         for row in cur.execute(student_query):
+            # Convert the index number to a string
             index_number_str = str(row[2])
+            # Add each item from the row to a specific column in the table
             self.student_table.setItem(table_row, 0, QtWidgets.QTableWidgetItem(row[1]))
             self.student_table.setItem(table_row, 1, QtWidgets.QTableWidgetItem(index_number_str))
+            # Increment the row counter
             table_row += 1
 
+    # This function loads attendance data for a specific course code and displays it in a table
     def load_attendance(self, course_code):
+        # Connect to the attendance database
         con = sqlite3.connect('../attendance_db.sqlite')
         cur = con.cursor()
+        # Select all data for the given course code
         query = "SELECT * FROM attendance where course_code = ?"
+        # Set the number of rows in the attendance table to the number of results returned by the query
         tablerow = 0
         self.attendance_table.setRowCount(len(cur.execute(query, (course_code,)).fetchall()))
+        # Iterate over each row returned by the query and add it to the table
         for row in cur.execute(query, (course_code,)):
+            # Convert the index number to a string
             index_number_str = str(row[2])
+            # Add each item from the row to a specific column in the table
             self.attendance_table.setItem(tablerow, 0, QtWidgets.QTableWidgetItem(row[1]))
             self.attendance_table.setItem(tablerow, 1, QtWidgets.QTableWidgetItem(index_number_str))
             self.attendance_table.setItem(tablerow, 2, QtWidgets.QTableWidgetItem(row[3]))
             self.attendance_table.setItem(tablerow, 3, QtWidgets.QTableWidgetItem(row[4]))
             self.attendance_table.setItem(tablerow, 4, QtWidgets.QTableWidgetItem(row[5]))
             self.attendance_table.setItem(tablerow, 5, QtWidgets.QTableWidgetItem(row[6]))
+            # Increment the row counter
             tablerow += 1
 
 
     def retranslateUi(self, MainWindow):
+        # Create a translation object
         _translate = QtCore.QCoreApplication.translate
+        # Set the window title
         MainWindow.setWindowTitle(_translate("MainWindow", "Facial Recognition Attendance System"))
+        # Set the text of various buttons and input fields in the student tab
         self.add_student_push_button.setText(_translate("MainWindow", "Add student"))
         self.name_text_input.setPlaceholderText(_translate("MainWindow", "Enter  Fullname"))
         self.index_number_text_input.setPlaceholderText(_translate("MainWindow", "Enter  Index Number"))
         self.refresh_student_push_button.setText(_translate("MainWindow", "Refresh List"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.student_tab), _translate("MainWindow", "STUDENT"))
+        # Set the text of various buttons and input fields in the attendance tab
         self.refresh_attendance_push_button.setText(_translate("MainWindow", "Refresh List"))
         self.course_code_text_input.setPlaceholderText(_translate("MainWindow", "Enter Course Code"))
         self.view_attendance_push_button.setText(_translate("MainWindow", "View Attendance"))

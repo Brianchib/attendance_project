@@ -54,12 +54,14 @@ model.add(layers.BatchNormalization())
 # the final dense layer units defines the number of outputs (classes) expected to be predicated during training
 model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same'))
 model.add(layers.MaxPooling2D(pool_size=(2,2)))
+
+# Flatten the output from convolutional layers and add dense layers with ReLU and sigmoid activations
 model.add(layers.Flatten())
 model.add(layers.Dense(units=128, activation='relu'))
-model.add(layers.Dense(units=10000, activation='sigmoid'))
+model.add(layers.Dense(units=10000, activation='softmax'))
 
 # output the summary of the model providing total number of parameters within the model
-model.summary()
+# model.summary()
 
 # set directory for training data and validation data if availabe
 train_data_dir = "../dataset/training"
@@ -94,7 +96,7 @@ vali_gen = vali_data_gen.flow_from_directory(
 )
 
 # Initialize and setup callbacks to save the model weights during training
-checkpoint_path = "training_1/cp.ckpt"
+checkpoint_path = "checkpoints/model-cp.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
 cp_callback = [callbacks.ModelCheckpoint(filepath=checkpoint_path, save_weights_only=True, verbose=1)]
 
@@ -105,11 +107,10 @@ model.compile(optimizer='adam', loss=losses.CategoricalCrossentropy(from_logits=
 # Training starts with model.fit
 history = model.fit(
     train_gen,
-    batch_size=32,
-    epochs=10,
+    validation_data=vali_gen,
+    batch_size=256,
+    epochs=5,
     callbacks=cp_callback,
 )
 
-#validation_data=vali_gen
 
-# folders = glob("../dataset/testing/*")

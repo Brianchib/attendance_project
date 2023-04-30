@@ -9,7 +9,7 @@ import numpy as np
 
 class FaceFeature(object):
     #def __init__(self, face_rec_graph, model_path = 'models/model-20170512-110547.ckpt-250000'):
-    def __init__(self, face_rec_graph, model_path = "../models/model-20170512-110547.ckpt-250000"):
+    def __init__(self, face_rec_graph, model_path = "../model/checkpoints/model-cp.ckpt-250000"):
         '''
 
         :param face_rec_sess: FaceRecSession object

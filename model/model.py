@@ -1,5 +1,5 @@
 import os
-
+import matplotlib as plt
 from keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras import layers, models, losses, callbacks, utils
 
@@ -61,7 +61,7 @@ model.add(layers.Dense(units=128, activation='relu'))
 model.add(layers.Dense(units=10000, activation='softmax'))
 
 # output the summary of the model providing total number of parameters within the model
-# model.summary()
+model.summary()
 
 # set directory for training data and validation data if availabe
 train_data_dir = "../dataset/training"
@@ -108,9 +108,19 @@ model.compile(optimizer='adam', loss=losses.CategoricalCrossentropy(from_logits=
 history = model.fit(
     train_gen,
     validation_data=vali_gen,
-    batch_size=256,
-    epochs=5,
+    epochs=10,
     callbacks=cp_callback,
 )
 
+plt.plot(history.history['accuracy'], label='accuracy')
+plt.plot(history.history['val_accuracy'], label='val')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.ylim([0.5, 1])
+plt.legend(loc='upper right')
 
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'val'], loc='upper right')

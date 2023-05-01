@@ -1,2 +1,3 @@
 dataset/*
 ./.python-version
+model/checkpoints
